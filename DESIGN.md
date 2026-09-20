@@ -109,8 +109,12 @@ stops looking like this mockup.
   icon 30 px with a coloured drop-shadow glow.
 - **Trending strip:** 58 px tall, hairline top and bottom, token avatars 27 px
   circles.
-- **Join band:** ~185 px tall with its own background image and a `rgba(11,7,20,.42)`
-  scrim over it.
+- **Join band:** background plate `cosmic.jpg`, 1916 × 821. The centre of the
+  art is deliberately empty so the heading and buttons sit between the two
+  graffiti corners. Scrim is a centred radial, `rgba(10,7,16,.72)` at the
+  middle fading to transparent at the edges — enough for text contrast without
+  flattening the planets. Vertical padding `clamp(48px, 7vw, 86px)` so the
+  plate has room to read.
 
 ---
 
