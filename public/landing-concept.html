@@ -54,6 +54,14 @@ img,svg{display:block;max-width:100%}
 .nav-side .lnk{display:flex;align-items:center;gap:8px;font-size:15px}
 @media(max-width:760px){.nav-side .lnk{display:none}}
 
+.burger{display:none;background:none;border:0;cursor:pointer;margin-left:auto;
+        padding:6px;flex-direction:column;gap:5px}
+.burger span{display:block;width:26px;height:2.5px;background:var(--ink);border-radius:2px}
+@media(max-width:899px){
+  .burger{display:flex}
+  .nav-side{display:none}
+  .nav{height:64px}
+}
 .cta{display:inline-flex;align-items:center;gap:10px;background:var(--cta-grad);
      color:#fff;font-weight:800;font-size:13px;letter-spacing:.09em;text-transform:uppercase;
      padding:11px 22px;border-radius:999px;white-space:nowrap;
@@ -64,10 +72,19 @@ img,svg{display:block;max-width:100%}
 /* ───────────────────────────────────────────────────────────── hero */
 .hero{position:relative;background:url('/hero.jpg') center right/cover no-repeat,var(--base);
       border-bottom:1px solid var(--rule)}
+@media(max-width:899px){
+  /* Portrait plate. The subject sits right-of-centre, so the art is anchored
+     top-right and the copy runs down the left where the frame is quietest. */
+  .hero{background:url('/hero-mobile.jpg') top right/cover no-repeat,var(--base);
+        min-height:620px;display:flex;align-items:flex-end}
+}
 .hero::before{content:'';position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(90deg,rgba(11,7,20,.97) 0%,rgba(11,7,20,.93) 34%,
              rgba(11,7,20,.58) 58%,rgba(11,7,20,.12) 100%)}
-@media(max-width:900px){.hero::before{background:rgba(11,7,20,.9)}}
+@media(max-width:899px){
+  .hero::before{background:linear-gradient(180deg,rgba(10,7,16,.34) 0%,rgba(10,7,16,.20) 34%,
+                rgba(10,7,16,.80) 72%,rgba(10,7,16,.96) 100%)}
+}
 .hero>*{position:relative;z-index:1}
 .hero-in{padding-block:clamp(28px,4vw,42px) clamp(28px,4vw,40px)}
 /* The copy column is pinned to the container's left edge, never centred, so
@@ -157,6 +174,50 @@ h1 em{font-style:normal;display:block;background:var(--grad);
 footer{padding-block:26px 44px;display:grid;gap:12px;font-size:12.5px;color:var(--dim)}
 footer .warn{color:#FFB25E;max-width:74ch;line-height:1.6}
 
+/* ─────────────────────────────────────────────────────────── mobile */
+.m-only{display:none}
+@media(max-width:899px){
+  .d-only{display:none}
+  .m-only{display:block}
+  .hero-in{padding-block:0 30px;width:100%}
+  .eyebrow{margin-bottom:12px}
+
+  .ladder{list-style:none;margin:0 0 18px;padding:0}
+  .ladder li{font-size:clamp(17px,5.2vw,22px);font-weight:600;letter-spacing:.24em;
+             text-transform:uppercase;color:#9C93AE;line-height:1.5}
+  .m-tag{font-size:clamp(17px,5.2vw,22px);font-weight:800;letter-spacing:.06em;
+         text-transform:uppercase;line-height:1.25;margin:0 0 24px;
+         padding-top:16px;border-top:2px solid var(--cta-b);display:inline-block}
+
+  .cta-big{width:100%;justify-content:center;padding:18px 20px}
+  .tg{justify-content:flex-start}
+
+  /* Four across, as the mockup has them, so the text centres and tightens. */
+  .cards{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+  .feat{flex-direction:column;align-items:center;text-align:center;padding:14px 7px;gap:8px}
+  .feat .ic{font-size:23px;margin:0}
+  .feat h3{font-size:12px;line-height:1.15}
+  .feat p{font-size:10px;line-height:1.3}
+
+  /* Token name over percentage, which is how the mockup stacks them. */
+  .strip-in{height:auto;padding-block:12px;gap:16px}
+  .tok{flex-direction:column;align-items:flex-start;gap:0;line-height:1.2;
+       padding-left:34px;position:relative;min-height:30px;justify-content:center}
+  .tok .av{position:absolute;left:0;top:50%;transform:translateY(-50%)}
+  .tok .nm,.tok .pc{font-size:12.5px}
+  .strip-t{font-size:12px}
+  .moon{display:none}
+
+  .ghosts{flex-direction:column}
+  .ghost{width:100%;justify-content:center}
+}
+/* The mockup keeps four across even on a phone, so the cards get tighter
+   rather than fewer. Below 360 that stops being legible and they pair up. */
+@media(max-width:359px){
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .feat h3{font-size:13px}.feat p{font-size:11px}
+}
+
 @media(prefers-reduced-motion:reduce){*{transition-duration:1ms!important}}
 </style>
 </head>
@@ -181,6 +242,9 @@ footer .warn{color:#FFB25E;max-width:74ch;line-height:1.6}
       <a href="#features">Features</a><a href="#how">How It Works</a>
       <a href="#testimonials">Testimonials</a><a href="#faq">FAQ</a>
     </div>
+    <button class="burger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
     <div class="nav-side">
       <a class="lnk" href="#x"><svg class="ico"><use href="#i-x"/></svg>Follow on X</a>
       <a class="lnk" href="https://github.com/veyro-real"><svg class="ico"><use href="#i-gh"/></svg>GitHub</a>
@@ -192,8 +256,12 @@ footer .warn{color:#FFB25E;max-width:74ch;line-height:1.6}
 <section class="hero">
   <div class="wrap hero-in"><div class="hero-copy">
     <p class="eyebrow">Meme coins &nbsp;·&nbsp; Smart data &nbsp;·&nbsp; Better days</p>
-    <h1>From doomer<em>to alpha zoomer.</em></h1>
-    <p class="lead">Veyro scans meme coin launches, watches social sentiment, and tracks
+    <h1 class="d-only">From doomer<em>to alpha zoomer.</em></h1>
+    <div class="m-only">
+      <ul class="ladder"><li>Scan</li><li>Track</li><li>Analyze</li><li>Trade</li><li>Send</li></ul>
+      <p class="m-tag">Solana memecoins<br>made simple</p>
+    </div>
+    <p class="lead d-only">Veyro scans meme coin launches, watches social sentiment, and tracks
       smart wallets so you can find better plays before the crowd.</p>
     <a class="cta-big" href="https://t.me/theveyrobotbot">
       <svg class="ico"><use href="#i-tg"/></svg>Open the bot<span class="arw">→</span></a>

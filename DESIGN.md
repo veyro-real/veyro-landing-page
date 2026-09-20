@@ -134,7 +134,43 @@ stops looking like this mockup.
 
 ---
 
-## 5. Honest notes about the source
+## 5. Mobile
+
+The phone mockup is not a reflow of the desktop page — it is a different
+composition, and the build treats it that way rather than letting the desktop
+layout squeeze.
+
+| | Desktop | Mobile (< 900 px) |
+| --- | --- | --- |
+| Hero art | `hero.jpg`, landscape, anchored centre-right | `hero-mobile.jpg`, portrait, anchored top-right |
+| Scrim | horizontal, opaque left → clear right | **vertical**, clear at the top → opaque at the bottom |
+| Headline | `FROM DOOMER / TO ALPHA ZOOMER.` | replaced by a word ladder |
+| Hero copy | lead paragraph | `SCAN · TRACK · ANALYZE · TRADE · SEND` stacked, then `SOLANA MEMECOINS MADE SIMPLE` |
+| Nav | wordmark · 4 links · X · GitHub · CTA | wordmark · hamburger |
+| CTA | inline pill | full-bleed pill |
+| Cards | 4 across, icon left of text | 4 across, icon **above** centred text |
+| Token chips | avatar · name · % in a row | name over % beside the avatar |
+| `TO THE MOON →` | present | hidden |
+
+Details that matter:
+
+- **The scrim rotates.** On desktop the art is to the right of the copy, so the
+  gradient runs horizontally. On mobile the subject fills the frame, so the copy
+  sits at the bottom and the gradient runs vertically — clear at the top where
+  the face is, near-solid at the bottom where the text is.
+- **The word ladder is tracked to +0.24 em** in a muted `#9C93AE`, which is what
+  keeps it reading as a spec sheet rather than a nav list.
+- **`SOLANA MEMECOINS MADE SIMPLE` carries a 2 px `--cta-b` rule above it.** It is
+  the only horizontal rule in the whole mobile hero and it does the work of a
+  section break.
+- **Four cards stay four across down to 360 px**, tightening rather than
+  reflowing, because that is what the mockup shows. Below 360 they pair up, where
+  10 px type stops being legible.
+- The hamburger is presentational in this concept. It has no menu behind it.
+
+---
+
+## 6. Honest notes about the source
 
 Three things in the mockup are claims the product cannot currently make:
 **Watches X** is not wired, **Follows wallets** does not exist, and **Sends alerts**
