@@ -151,6 +151,10 @@ layout squeeze.
 | Cards | 4 across, icon left of text | 4 across, icon **above** centred text |
 | Token chips | avatar · name · % in a row | name over % beside the avatar |
 | `TO THE MOON →` | present | hidden |
+| Token count | six | **four** (DOGE, PEPE, BONK, MEW) |
+| Before/after | inside the hero | **after the cards**, on screen two |
+| Eyebrow | present | absent |
+| Wordmark | 26 px | 34–44 px, a headline rather than chrome |
 
 Details that matter:
 
@@ -166,6 +170,16 @@ Details that matter:
 - **Four cards stay four across down to 360 px**, tightening rather than
   reflowing, because that is what the mockup shows. Below 360 they pair up, where
   10 px type stops being legible.
+- **Screen one is exactly one viewport.** `min-height: calc(100dvh - 72px)`,
+  with the ladder starting at `26vh` and the CTA pinned to the bottom via
+  `margin-top: auto`. The empty space between the tag and the button is most of
+  what makes the mockup feel composed rather than stacked.
+- **The rule above `SOLANA MEMECOINS MADE SIMPLE` is 46 px wide**, drawn as a
+  `::before`, not a full-width `border-top`. It is the only rule in the hero.
+- **Contrast was measured, not eyeballed.** The ladder at `#9C93AE` scored
+  **2.5:1** against a bright photo pixel — under the 4.5 floor. Fixed on two
+  axes: the colour moved to `#CFC7DC` and the mobile scrim goes near-solid from
+  46% down. Now 11.9:1. A text-shadow on hero type catches whatever survives.
 - The hamburger is presentational in this concept. It has no menu behind it.
 
 ---
