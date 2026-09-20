@@ -1,0 +1,157 @@
+/* Hallmark · macrostructure: Manifesto · genre: atmospheric · theme: Terminal
+ * tone: technical/brutalist · anchor hue: violet 305 (Veyro brand)
+ * nav: N9 minimal-corner · footer: Ft5 statement · enrichment: none (typography only)
+ * pre-emit critique: P5 H5 E4 S5 R5 V4
+ *
+ * Every token is scoped to .vc rather than :root so this concept route cannot
+ * restyle the live landing page sharing the same globals.css.
+ */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+.vc {
+  --paper:      oklch(13% 0.012 290);
+  --paper-2:    oklch(17% 0.015 290);
+  --rule:       oklch(26% 0.018 290);
+  --ink:        oklch(95% 0.005 290);
+  --muted:      oklch(62% 0.012 290);
+  --accent:     oklch(72% 0.20 305);
+  --accent-dim: oklch(45% 0.13 305);
+  --warn:       oklch(72% 0.16 40);
+
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --space-xs: 4px;  --space-sm: 8px;  --space-md: 16px;
+  --space-lg: 32px; --space-xl: 64px; --space-2xl: 112px;
+
+  --text-display: clamp(2.4rem, 8.5vw, 7rem);
+  --text-lead:    clamp(1rem, 2.1vw, 1.3rem);
+  --text-sm:      0.82rem;
+  --text-xs:      0.72rem;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 140ms;
+
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: clip;
+  /* Terminal grain, kept under 4% so it reads as texture not noise. */
+  background-image:
+    radial-gradient(ellipse 120% 80% at 50% -10%, oklch(30% 0.09 305 / 0.30), transparent 70%),
+    repeating-linear-gradient(0deg, transparent 0 2px, oklch(100% 0 0 / 0.012) 2px 3px);
+}
+
+.vc *, .vc *::before, .vc *::after { box-sizing: border-box; }
+.vc a { color: inherit; text-decoration: none; }
+.vc :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+/* ---------------------------------------------------------------- corners */
+.vc-top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--space-md) clamp(var(--space-md), 4vw, var(--space-xl));
+  font-size: var(--text-xs); letter-spacing: 0.18em; text-transform: uppercase;
+}
+.vc-mark { font-weight: 700; letter-spacing: 0.3em; }
+.vc-mark b { color: var(--accent); }
+.vc-corner { display: flex; gap: var(--space-md); color: var(--muted); }
+.vc-corner a { transition: color var(--dur-fast) var(--ease-out); }
+.vc-corner a:hover { color: var(--ink); }
+
+/* ---------------------------------------------------------------- hero */
+.vc-main {
+  flex: 1;
+  padding: clamp(var(--space-lg), 7vw, var(--space-2xl)) clamp(var(--space-md), 4vw, var(--space-xl));
+  display: flex; flex-direction: column; justify-content: center;
+  max-width: 1180px; width: 100%; margin: 0 auto;
+}
+
+.vc-h1 {
+  font-size: var(--text-display);
+  line-height: 0.93;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+  margin: 0 0 var(--space-lg);
+  max-width: 16ch;
+  overflow-wrap: anywhere;
+  min-width: 0;
+  position: relative;
+}
+/* The second line is the same sentence told honestly. It fades in over the
+   first rather than jittering, so it reads as a correction not a gimmick. */
+.vc-h1 .alt {
+  position: absolute; inset: 0;
+  color: var(--accent);
+  opacity: 0;
+  animation: vc-swap 13s var(--ease-out) infinite;
+}
+.vc-h1 .base { animation: vc-swap-out 13s var(--ease-out) infinite; }
+@keyframes vc-swap {
+  0%, 42% { opacity: 0; } 48%, 68% { opacity: 1; } 74%, 100% { opacity: 0; }
+}
+@keyframes vc-swap-out {
+  0%, 42% { opacity: 1; } 48%, 68% { opacity: 0; } 74%, 100% { opacity: 1; }
+}
+
+.vc-lead {
+  font-size: var(--text-lead); line-height: 1.55; color: var(--muted);
+  max-width: 54ch; margin: 0 0 var(--space-xl);
+}
+.vc-lead b { color: var(--ink); font-weight: 400; }
+
+.vc-cta {
+  display: inline-flex; align-items: center; gap: var(--space-sm);
+  background: var(--accent); color: oklch(13% 0.012 290);
+  font-weight: 700; font-size: var(--text-sm);
+  letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 18px var(--space-lg);
+  align-self: flex-start;
+  white-space: nowrap;
+  transition: transform var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+}
+.vc-cta:hover { background: oklch(78% 0.20 305); transform: translateY(-1px); }
+.vc-cta:active { transform: translateY(0); }
+.vc-handle { margin: var(--space-md) 0 0; font-size: var(--text-sm); color: var(--muted); }
+
+/* ---------------------------------------------------------------- ticker */
+.vc-ticker {
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  margin: var(--space-2xl) 0 var(--space-xl);
+  padding: var(--space-md) 0;
+  overflow: hidden; position: relative;
+  font-size: var(--text-xs); letter-spacing: 0.2em; color: var(--accent-dim);
+}
+.vc-ticker-track { display: inline-flex; gap: var(--space-lg); white-space: nowrap; animation: vc-scroll 42s linear infinite; }
+.vc-ticker-track span::after { content: ' ·'; color: var(--rule); }
+@keyframes vc-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ---------------------------------------------------------------- truths */
+.vc-truths {
+  display: grid; gap: var(--space-lg) var(--space-xl);
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  margin-bottom: var(--space-2xl);
+}
+.vc-truths h2 { font-size: var(--text-sm); font-weight: 700; margin: 0 0 var(--space-sm); letter-spacing: 0.02em; }
+.vc-truths p { margin: 0; font-size: var(--text-sm); line-height: 1.6; color: var(--muted); }
+.vc-truths .n { color: var(--accent); }
+
+/* ---------------------------------------------------------------- footer */
+.vc-foot {
+  border-top: 1px solid var(--rule);
+  padding: var(--space-lg) clamp(var(--space-md), 4vw, var(--space-xl));
+  display: flex; flex-wrap: wrap; gap: var(--space-md) var(--space-lg);
+  align-items: baseline; justify-content: space-between;
+  font-size: var(--text-xs); color: var(--muted);
+}
+.vc-foot a { color: var(--ink); white-space: nowrap; }
+.vc-foot a:hover { color: var(--accent); }
+.vc-disclose { color: var(--warn); max-width: 62ch; line-height: 1.6; }
+
+@media (prefers-reduced-motion: reduce) {
+  .vc-ticker-track { animation: none; }
+  .vc-h1 .alt { display: none; }
+  .vc-h1 .base { animation: none; }
+  .vc * { transition-duration: 1ms !important; }
+}
