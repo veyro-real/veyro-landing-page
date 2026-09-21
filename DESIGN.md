@@ -136,51 +136,117 @@ stops looking like this mockup.
 
 ## 5. Mobile
 
-The phone mockup is not a reflow of the desktop page — it is a different
-composition, and the build treats it that way rather than letting the desktop
-layout squeeze.
+Source: `design/concepts/mobile-screen-one-mockup.png` (941 × 1672). The phone
+design is **not** a reflow of the desktop page and the build does not treat it
+as one. It is two screens: the hero, then everything from "How Veyro works"
+down.
+
+### Screen one
 
 | | Desktop | Mobile (< 900 px) |
 | --- | --- | --- |
-| Hero art | `hero.jpg`, landscape, anchored centre-right | `hero-mobile.jpg`, portrait, anchored top-right |
-| Scrim | horizontal, opaque left → clear right | **vertical**, clear at the top → opaque at the bottom |
-| Headline | `FROM DOOMER / TO ALPHA ZOOMER.` | replaced by a word ladder |
-| Hero copy | lead paragraph | `SCAN · TRACK · ANALYZE · TRADE · SEND` stacked, then `SOLANA MEMECOINS MADE SIMPLE` |
-| Nav | wordmark · 4 links · X · GitHub · CTA | wordmark · hamburger |
-| CTA | inline pill | full-bleed pill |
-| Cards | 4 across, icon left of text | 4 across, icon **above** centred text |
-| Token chips | avatar · name · % in a row | name over % beside the avatar |
-| `TO THE MOON →` | present | hidden |
-| Token count | six | **four** (DOGE, PEPE, BONK, MEW) |
-| Before/after | inside the hero | **after the cards**, on screen two |
+| Nav | bar with a rule, in flow | **no bar** — `.navwrap` is absolute over the art, nav transparent |
+| Hero | `hero.jpg`, landscape, centre-right | `hero-mobile.jpg`, portrait, **`top center`** |
+| Hero height | content | `100dvh` — screen one is the whole viewport |
+| Wordmark | 26–36 px tall | `clamp(150px, 44vw, 250px)` **wide**, set on the art |
+| Opening line | `FROM DOOMER / TO ALPHA ZOOMER.` | handwritten `Good Coins / Better Days / ♡` |
+| Corner tag | — | `SAME DEGENS BRIGHTER TOMORROW ♡`, top right |
+| Body | lead paragraph | `SCAN · TRACK · ANALYZE · TRADE · SEND` stacked |
+| Tag | — | `SOLANA / MEMECOINS / MADE SIMPLE`, three lines |
+| CTA | inline pill | full width of the copy column, low in the frame |
+| Telegram line | left, one line | centred, wraps to two |
+| Before/after | inside the hero | **screen two**, after the cards |
 | Eyebrow | present | absent |
-| Wordmark | 26 px | 34–44 px, a headline rather than chrome |
 
-Details that matter:
+### The handwriting
 
-- **The scrim rotates.** On desktop the art is to the right of the copy, so the
-  gradient runs horizontally. On mobile the subject fills the frame, so the copy
-  sits at the bottom and the gradient runs vertically — clear at the top where
-  the face is, near-solid at the bottom where the text is.
-- **The word ladder is tracked to +0.24 em** in a muted `#9C93AE`, which is what
-  keeps it reading as a spec sheet rather than a nav list.
-- **`SOLANA MEMECOINS MADE SIMPLE` carries a 2 px `--cta-b` rule above it.** It is
-  the only horizontal rule in the whole mobile hero and it does the work of a
-  section break.
-- **Four cards stay four across down to 360 px**, tightening rather than
-  reflowing, because that is what the mockup shows. Below 360 they pair up, where
-  10 px type stops being legible.
-- **Screen one is exactly one viewport.** `min-height: calc(100dvh - 72px)`,
-  with the ladder starting at `26vh` and the CTA pinned to the bottom via
-  `margin-top: auto`. The empty space between the tag and the button is most of
-  what makes the mockup feel composed rather than stacked.
-- **The rule above `SOLANA MEMECOINS MADE SIMPLE` is 46 px wide**, drawn as a
-  `::before`, not a full-width `border-top`. It is the only rule in the hero.
-- **Contrast was measured, not eyeballed.** The ladder at `#9C93AE` scored
-  **2.5:1** against a bright photo pixel — under the 4.5 floor. Fixed on two
-  axes: the colour moved to `#CFC7DC` and the mobile scrim goes near-solid from
-  46% down. Now 11.9:1. A text-shadow on hero type catches whatever survives.
-- The hamburger is presentational in this concept. It has no menu behind it.
+Two Caveat 700 elements, both `aria-hidden` — they are paint on a photograph,
+not copy a screen reader should read twice.
+
+| | Size | Colour | Transform |
+| --- | --- | --- | --- |
+| `.m-script` | `clamp(33px, 9.6vw, 60px)` | `--pink` | `rotate(-7deg)` |
+| `.m-graf` | `clamp(13.5px, 3.9vw, 21px)`, uppercase | `--pink` | `rotate(4deg)` |
+
+`--script: 'Caveat', ui-rounded, 'Segoe Script', cursive`. The mockup's hand is
+a slanted marker script; Caveat is the closest free face, **not an
+identification** of the original.
+
+### Composition
+
+The copy reads down from the top, the button and the Telegram line hold the
+bottom, and the plate gets everything between them — `.m-only { margin-bottom:
+auto }` puts the whole slack in one gap rather than spreading it evenly. The
+copy column caps at 560 px so a tablet does not stretch the button across the
+screen.
+
+A 38 px `--mag-2` rule sits above the tag, drawn as a `::before`, not a
+full-width `border-top`. It is the only rule in the hero.
+
+### Lighting
+
+The plate is the screen, so there is no full wash. Four pieces, all on
+`.hero::before` except the column:
+
+| Layer | Job |
+| --- | --- |
+| radial, top left | the handwriting lands on a magenta lamp in this plate |
+| radial, top right | same problem behind the corner tag |
+| linear, top | seats the wordmark |
+| radial + linear, bottom | seats the button and the Telegram line |
+| `.hero::after`, 95° column, **masked out below 56%** | the dark left edge the copy sits on, lifted before it reaches the coin |
+
+The mask is what keeps this from flattening the photo: the column is at full
+strength where the ladder and the tag are and gone by the time it reaches the
+subject and the coin.
+
+**`top center`, not `top right`.** The right anchor cropped the left edge of the
+plate and pushed the subject into the copy column, which is what forced the
+heavy scrim in the first place.
+
+### Measured contrast
+
+Worst background pixel under each glyph box, against a canvas reconstruction of
+the same plate and the same gradient stack:
+
+| | 320 px | 375 px | 414 px |
+| --- | --- | --- | --- |
+| `.m-script` (large) | 3.71 | 6.34 | 6.99 |
+| `.m-graf` | 5.68 | 6.66 | 6.59 |
+| `.ladder` | 7.24 | 9.85 | 9.81 |
+| `.m-tag` | 5.47 | 6.72 | 12.24 |
+| `.tg` | 5.16 | 14.96 | 15.68 |
+
+All pass 4.5:1 except `.m-script` at 320 px, which is 33 px display type and so
+sits under the 3:1 large-text floor. Hero type also carries a dark text-shadow
+for whatever a gradient cannot catch.
+
+### Screen two
+
+- **Cards are 2 × 2**, icon above left-aligned text. They go 4 across from
+  640 px, and single column below 360 px.
+- **Four tokens**, not six: DOGE, PEPE, BONK, MEW. `TO THE MOON →` is hidden.
+- The trending row is **fixed-sized, not fluid** — sized off `vw` it grew with
+  the screen and never stopped overflowing. All four fit from 375 px up; below
+  that the row scrolls, which is what a ticker should do. Tokens are
+  `flex: 0 0 auto`: a flexible basis let the boxes collapse under their own
+  labels and the names ran into each other.
+- Below 540 px of height the corner tag is hidden — a phone on its side has no
+  room for it over the subject's head.
+
+### Alternative concepts, not built
+
+`design/concepts/` holds mockups that are on file but not implemented:
+
+| File | What it is |
+| --- | --- |
+| `mobile-screen-one-mockup.png` | the phone hero this build matches |
+| `mobile-mockup-full-page.png` | an earlier full-page phone comp, with a nav bar |
+| `alt-desktop-outsourced-my-gambling.png` | a different desktop direction — `I outsourced my gambling addiction to a bot.`, a four-stat proof bar, nav links in the bar. Saved for reference only. |
+
+Its stat bar (`24/7 Scanning`, `1000s Tokens Monitored`, `Real-Time Alerts`,
+`Built for Degens`) would need checking against what the product actually does
+before it could ship.
 
 ---
 
