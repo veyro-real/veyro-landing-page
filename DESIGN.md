@@ -204,6 +204,17 @@ subject and the coin.
 plate and pushed the subject into the copy column, which is what forced the
 heavy scrim in the first place.
 
+**Above 480 px the plate is two layers.** A phone frame is taller than the
+plate's aspect, so `cover` scales it by height and the whole image height is
+in view — which is why the coin lands at 66–81% and the button clears it.
+Wider than that, `cover` scales by width instead, more of the desk comes in,
+the coin drops toward the bottom and the pinned button lands on it. So from
+480 px the plate is set at `auto 100%` pinned right, which is the phone's crop
+at any width, with the same file at `cover` underneath filling the strip that
+leaves on the left. One download, no seam, and the strip sits under the
+darkest part of the scrim. Unpinning the button instead was tried and was
+worse: it floats mid-frame and leaves a void underneath.
+
 ### Measured contrast
 
 Worst background pixel under each glyph box, against a canvas reconstruction of
