@@ -150,11 +150,33 @@ stops looking like this mockup.
   `#952EB8`, which is near-black against a night plate. `--grad` stays as the
   record of what the mockup actually contains.
 
-- **The desktop hero scrim was cut back** from `.97/.95/.62/.12` to
-  `.90/.84/.54/.14/0`. At the old weights the city behind the copy was painted
-  out entirely. The plate is anchored `right 66%` rather than `right center`,
-  biased up the frame so the coin survives the vertical crop `cover` takes on a
-  wide, short viewport.
+- **The desktop hero no longer has a full-width scrim.** Buying text contrast
+  by dimming the whole photograph also takes the shine off the coin, which is
+  the one thing in the frame that has to stay lit. The contrast now comes from
+  a panel behind the copy — black frosted glass, `rgba(7,4,13,.58)` with
+  `backdrop-filter: blur(22px) saturate(.85)`, a 20 px radius and a 7%-white
+  hairline. What is left of the gradient (`.58 → .30 → .06 → 0`) only seats
+  the panel; it does not carry the type. There is an `@supports not
+  (backdrop-filter:…)` fallback at `.86` flat.
+
+- **The plate is a `<picture>`, not a background.** A background can only be
+  re-framed where `cover` happens to leave overflow, and on a wide desktop it
+  leaves none — the image fills the width exactly, so `background-position` has
+  nothing to move. That is why the subject could not be pushed clear of the
+  copy. An `<img>` takes a transform:
+
+  ```css
+  .hero-art img { object-fit: cover; object-position: 62% center;
+                  transform: scale(1.28) translateX(8%) }
+  ```
+
+  The translate stays inside the slack the scale leaves, so it still covers.
+  The phone gets `object-position: center top` and no transform. Which file is
+  used is a `<source media>` on the `<picture>`, not a CSS swap.
+
+  One trap: `.hero > *` sets `position: relative`, which beat `.hero-art`'s own
+  `position: absolute` on equal specificity and pulled the plate into the flow,
+  pushing the copy underneath it. The selector is `.hero > .hero-art`.
 
 ---
 

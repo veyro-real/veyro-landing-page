@@ -72,8 +72,15 @@ img,svg{display:block;max-width:100%}
 .cta:active{transform:translateY(0)}
 
 /* ───────────────────────────────────────────────────────────── hero */
-.hero{position:relative;background:url('/hero.jpg') right 66%/cover no-repeat,var(--base);
+.hero{position:relative;overflow:hidden;background:var(--base);
       border-bottom:1px solid var(--rule)}
+/* Beats the `.hero>*` rule below, which would otherwise pull the plate into
+   the flow and push the copy underneath it. */
+.hero>.hero-art{position:absolute;inset:0;z-index:0;pointer-events:none}
+.hero-art img{width:100%;height:100%;object-fit:cover;object-position:62% center;
+  /* Pushed right and in, so she and the coin clear the copy panel. The
+     translate is under the slack the scale leaves, so it still covers. */
+  transform:scale(1.28) translateX(8%)}
 @media(max-width:899px){
   /* Portrait plate. The subject sits right-of-centre, so the art is anchored
      top-right and the copy runs down the left where the frame is quietest. */
@@ -85,14 +92,13 @@ img,svg{display:block;max-width:100%}
      full viewport, edge to edge, exactly as the mockup frames it. */
   .navwrap{position:absolute;top:0;left:0;right:0;z-index:5}
   .nav{background:none;border-bottom:0;height:auto;padding-block:15px}
-  /* Centred, not anchored right: the plate is composed around her, and the
-     right anchor was cropping the left edge and pushing her into the copy. */
-  .hero{background:url('/hero-mobile.jpg') top center/cover no-repeat,var(--base);
-        min-height:100dvh;display:flex;align-items:stretch;border-bottom:0}
+  .hero{min-height:100dvh;display:flex;align-items:stretch;border-bottom:0}
+  /* Phone framing is the plain one: centred, from the top, no push. */
+  .hero-art img{object-position:center top;transform:none}
 }
 .hero::before{content:'';position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(90deg,rgba(11,7,20,.90) 0%,rgba(11,7,20,.84) 38%,
-             rgba(11,7,20,.54) 58%,rgba(11,7,20,.14) 82%,rgba(11,7,20,0) 100%)}
+  background:linear-gradient(90deg,rgba(11,7,20,.58) 0%,rgba(11,7,20,.30) 36%,
+             rgba(11,7,20,.06) 60%,rgba(11,7,20,0) 78%)}
 @media(max-width:899px){
   /* Measured: the ladder at #9C93AE over a bright photo pixel was 2.5:1.
      The art is clear at the top, then the scrim goes near-solid from just
@@ -125,8 +131,21 @@ img,svg{display:block;max-width:100%}
   text-shadow:0 1px 14px rgba(5,3,10,.85),0 1px 3px rgba(5,3,10,.6)}
 .hero-in{padding-block:clamp(28px,4vw,42px) clamp(28px,4vw,40px)}
 /* The copy column is pinned to the container's left edge, never centred, so
-   on a wide screen it stays in line with the logo instead of drifting inward. */
-.hero-copy{max-width:660px;margin-right:auto}
+   on a wide screen it stays in line with the logo instead of drifting inward.
+   Black frosted glass: the type gets its contrast from a panel of its own
+   rather than from a gradient over the whole photograph, which is what was
+   taking the shine off the coin. */
+.hero-copy{max-width:min(720px,62%);margin-right:auto;position:relative;
+  padding:clamp(22px,2.4vw,34px) clamp(22px,2.4vw,36px) clamp(24px,2.6vw,36px);
+  margin-left:calc(-1 * clamp(22px,2.4vw,36px));
+  border-radius:20px;border:1px solid rgba(255,255,255,.07);
+  background:rgba(7,4,13,.58);
+  -webkit-backdrop-filter:blur(22px) saturate(.85);
+          backdrop-filter:blur(22px) saturate(.85);
+  box-shadow:0 24px 70px rgba(0,0,0,.45)}
+@supports not (backdrop-filter:blur(1px)){
+  .hero-copy{background:rgba(7,4,13,.86)}
+}
 
 /* The mockup opens on a handwritten line over the art, with the graffiti
    answering it in the opposite corner. Both are decoration on a photograph,
@@ -255,7 +274,9 @@ footer .warn{color:#FFB25E;max-width:74ch;line-height:1.6}
   .hero{align-items:stretch}
   .hero-in{padding-block:clamp(88px,15.5vh,116px) clamp(40px,7vh,62px);
            width:100%;display:flex}
-  .hero-copy{display:flex;flex-direction:column;flex:1;max-width:560px}
+  .hero-copy{display:flex;flex-direction:column;flex:1;max-width:560px;
+             padding:0;margin-left:0;border:0;background:none;box-shadow:none;
+             -webkit-backdrop-filter:none;backdrop-filter:none;border-radius:0}
   /* Copy reads down from the top, the button and the Telegram line hold the
      bottom, and the plate gets the space between them. */
   .m-only{margin-bottom:auto}
@@ -324,14 +345,13 @@ footer .warn{color:#FFB25E;max-width:74ch;line-height:1.6}
 @media(min-width:640px) and (max-width:899px){
   .cards{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
-/* The portrait plate only works while the frame is taller than the plate is.
-   Past 9:16 `cover` has to scale it up to fill the width, more of the desk
-   comes into view, the coin drops toward the bottom of the frame and the
-   button lands on it. That is the exact condition below, so past it the
-   landscape plate takes over -- the same scene, shot wide. One image at a
-   time: layering the two over each other repeats the picture. */
+/* Which plate is in use is decided by <source media> on the <picture>: the
+   portrait one only while the frame is taller than 9:16, the wide one past
+   that. One image at a time -- layering two crops of the same file over each
+   other repeats the picture. This rule only frames the wide plate when it
+   takes over inside the phone layout. */
 @media(max-width:899px) and (min-aspect-ratio:9/16){
-  .hero{background:url('/hero.jpg') 70% center/cover no-repeat,var(--base)}
+  .hero-art img{object-position:70% center}
 }
 @media(min-width:480px) and (max-width:899px){
   .hero-in{padding-block:clamp(72px,9vh,98px) clamp(30px,4.4vh,48px)}
@@ -378,6 +398,10 @@ footer .warn{color:#FFB25E;max-width:74ch;line-height:1.6}
 </div>
 
 <section class="hero">
+  <picture class="hero-art">
+    <source media="(max-width:899px) and (max-aspect-ratio:9/16)" srcset="/hero-mobile.jpg">
+    <img src="/hero.jpg" alt="" width="1920" height="1081" fetchpriority="high">
+  </picture>
   <p class="m-graf" aria-hidden="true">Same<br>degens<br>brighter<br>tomorrow<br>♡</p>
   <div class="wrap hero-in"><div class="hero-copy">
     <p class="m-script" aria-hidden="true">Good Coins<br>Better Days<br><span class="hrt">♡</span></p>
