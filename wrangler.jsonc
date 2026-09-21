@@ -7,5 +7,12 @@
   "assets": {
     "directory": "./out",
     "not_found_handling": "404-page"
-  }
+  },
+  // Keep the preview URL alive. Adding a `routes` entry silently turns this
+  // off, which is how the workers.dev URL went dark on the first attempt.
+  "workers_dev": true
+  // veyro.wtf cannot be attached from here: its Cloudflare zone is not in
+  // this account (API 10082, "can't infer zone from route"). Restore the
+  // routes block once wrangler is logged into the account that owns it:
+  //   "routes": [{ "pattern": "veyro.wtf", "custom_domain": true }]
 }
