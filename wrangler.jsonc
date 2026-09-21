@@ -1,0 +1,11 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "veyro-landing",
+  "compatibility_date": "2026-09-15",
+  // Assets-only Worker: no `main`, so Cloudflare serves the export directly
+  // and there is no script to cold-start.
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  }
+}
