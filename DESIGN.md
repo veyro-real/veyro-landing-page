@@ -234,19 +234,51 @@ for whatever a gradient cannot catch.
 - Below 540 px of height the corner tag is hidden — a phone on its side has no
   room for it over the subject's head.
 
-### Alternative concepts, not built
+### Source mockups
 
-`design/concepts/` holds mockups that are on file but not implemented:
+`design/concepts/` holds what these pages were built from:
 
 | File | What it is |
 | --- | --- |
-| `mobile-screen-one-mockup.png` | the phone hero this build matches |
+| `mobile-screen-one-mockup.png` | the phone hero `/landing-concept.html` matches |
 | `mobile-mockup-full-page.png` | an earlier full-page phone comp, with a nav bar |
-| `alt-desktop-outsourced-my-gambling.png` | a different desktop direction — `I outsourced my gambling addiction to a bot.`, a four-stat proof bar, nav links in the bar. Saved for reference only. |
+| `alt-desktop-outsourced-my-gambling.png` | the second direction, built as `/landing-concept2.html` |
 
-Its stat bar (`24/7 Scanning`, `1000s Tokens Monitored`, `Real-Time Alerts`,
-`Built for Degens`) would need checking against what the product actually does
-before it could ship.
+---
+
+## 5b. Concept 2
+
+`/landing-concept2.html` is the same token set in a different composition. What
+changes:
+
+| | Concept 1 | Concept 2 |
+| --- | --- | --- |
+| Nav | its own band with a hairline | rides on the hero art, no band |
+| Headline | `FROM DOOMER / TO ALPHA ZOOMER.` | `I outsourced / my gambling / addiction to a bot.` |
+| Headline breaks | wraps | **explicit `<br>`**, hidden below 900 px |
+| Emphasis | line two, gradient | one word, gradient — flat `--pink` on a phone |
+| Proof | none | four-stat bar, each with its own short rule |
+| Cards | icon left of text | icon above centred text |
+| Tokens | 4 on mobile, 6 on desktop | 4 on mobile, 5 on desktop |
+| Hero art | portrait plate on mobile | landscape `hero.jpg`, swapping to the portrait plate under 640 px |
+
+Two things worth knowing:
+
+- **The headline breaks are the composition.** Three lines with the longest
+  last is not something greedy wrapping produces from a narrowed column, so
+  the breaks are explicit `<br>`s that disappear below 900 px. A hidden `<br>`
+  still needs a space in front of it or the words run together.
+- **The gradient on `addiction` goes flat on a phone.** Once the line wraps,
+  `background-clip: text` cuts the ramp mid-word and the dark half vanishes
+  into the plate.
+
+### The stat bar is a set of claims
+
+`24/7 Scanning` · `1000s Tokens Monitored` · `Real-Time Alerts` ·
+`Built for Degens`. The first three describe how the worker is built — it holds
+a socket open, it sees every pump.fun launch, it sends Telegram messages — but
+none of them is measured, and they are the kind of line that needs a number
+behind it before it goes anywhere near a live site.
 
 ---
 
