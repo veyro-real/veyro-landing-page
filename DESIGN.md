@@ -297,12 +297,24 @@ for whatever a gradient cannot catch.
 
 - **Cards are 2 × 2**, icon above left-aligned text. They go 4 across from
   640 px, and single column below 360 px.
-- **Four tokens**, not six: DOGE, PEPE, BONK, MEW. `TO THE MOON →` is hidden.
-- The trending row is **fixed-sized, not fluid** — sized off `vw` it grew with
-  the screen and never stopped overflowing. All four fit from 375 px up; below
-  that the row scrolls, which is what a ticker should do. Tokens are
-  `flex: 0 0 auto`: a flexible basis let the boxes collapse under their own
-  labels and the names ran into each other.
+- **The trending row is a live ticker.** Eight real Solana mints, fetched
+  client-side from DexScreener — free, keyless, CORS-open, and the same source
+  the bot uses. Real symbols, real logos, real 24h change, which means it goes
+  red as often as green. Nothing about fitting a fixed number of tokens
+  matters any more: the track holds the list twice and animates
+  `translateX(-50%)`, so the loop has no seam, and both ends are masked so
+  tokens do not pop in on a hard edge. It pauses on hover and on focus, and
+  `prefers-reduced-motion` turns the animation off and makes the row a plain
+  scroller.
+
+  **No invented numbers anywhere in the fallback.** The static markup ships
+  the symbols with an em dash for the change; the script fills in real
+  figures. A failed fetch leaves dashes, never a figure nobody measured.
+
+  Two bugs worth not repeating: a detached `<img>` with `loading="lazy"` never
+  starts loading, so every logo silently stayed a letter; and the deepest pool
+  for a mint sometimes reports no `h24`, so pool selection prefers a pool that
+  has one over a deeper one that does not.
 - Below 540 px of height the corner tag is hidden — a phone on its side has no
   room for it over the subject's head.
 

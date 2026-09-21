@@ -166,17 +166,37 @@ h1 em{font-style:normal;background:var(--grad-lit);-webkit-background-clip:text;
 /* ───────────────────────────────────────────────────────── trending */
 .strip{border-block:1px solid var(--rule);background:var(--band);
        margin-top:clamp(22px,3vw,38px)}
-.strip-in{display:flex;align-items:center;gap:clamp(12px,1.8vw,28px);min-height:58px;
-          padding-block:10px;overflow-x:auto;scrollbar-width:none}
-.strip-in::-webkit-scrollbar{display:none}
+.strip-in{display:flex;align-items:center;gap:clamp(12px,1.6vw,22px);min-height:58px;
+          padding-block:10px}
+
+/* The ticker travels. The track holds the list twice and moves exactly half
+   its width, so the loop has no seam. */
+.ticker{flex:1 1 auto;min-width:0;overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 28px,#000 calc(100% - 28px),transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 28px,#000 calc(100% - 28px),transparent)}
+.ticker-track{display:flex;align-items:center;gap:clamp(18px,2.4vw,34px);width:max-content;
+              animation:marquee 46s linear infinite}
+.ticker:hover .ticker-track,.ticker:focus-within .ticker-track{animation-play-state:paused}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){
+  .ticker-track{animation:none}
+  .ticker{overflow-x:auto;scrollbar-width:none}
+  .ticker::-webkit-scrollbar{display:none}
+}
 .strip-t{flex:none;display:flex;align-items:center;gap:7px;font-weight:800;
          font-size:clamp(11px,1.1vw,14px);letter-spacing:.05em;text-transform:uppercase}
 .strip-t b{color:var(--mag-2)}
 .tok{flex:none;display:flex;align-items:center;gap:9px;white-space:nowrap}
-.tok .av{width:clamp(22px,2.2vw,28px);height:clamp(22px,2.2vw,28px);border-radius:50%;
-         display:grid;place-items:center;font-size:11px;font-weight:800;color:#170d22;flex:none}
+.tok .av{position:relative;width:clamp(22px,2.2vw,28px);height:clamp(22px,2.2vw,28px);
+         border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:800;
+         color:#170d22;flex:none;overflow:hidden}
+/* The logo sits over the letter, so a dead CDN link just uncovers it. */
+.tok .av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .tok .nm{font-weight:600;letter-spacing:.03em;font-size:clamp(11px,1.1vw,14px)}
-.tok .pc{color:#17C063;font-weight:700;font-size:clamp(11px,1.1vw,14px)}
+/* Real data goes red as often as it goes green. */
+.tok .pc{font-weight:700;font-size:clamp(11px,1.1vw,14px);color:var(--dim)}
+.tok .pc.up{color:#17C063}
+.tok .pc.down{color:#FF5C7A}
 .tok .col{display:flex;flex-direction:column;line-height:1.2}
 .moon{flex:none;margin-left:auto;padding-left:clamp(14px,2vw,26px);border-left:1px solid var(--rule);
       display:flex;align-items:center;gap:9px;font-weight:700;font-size:13px;letter-spacing:.09em;
@@ -226,10 +246,10 @@ footer .warn{color:#FFB25E;max-width:74ch;line-height:1.6}
   .cta-big{width:100%;justify-content:center}
   .tg{flex-wrap:wrap}
 
-  /* Four tokens fit a phone; the fifth is dropped rather than clipped. */
-  .m-hide{display:none}
-  .strip-in{gap:3px;padding-inline:8px;min-height:0}
-  .tok{gap:5px}
+  /* Nothing has to be squeezed to fit any more -- the row travels. */
+  .strip-in{gap:10px;padding-inline:12px;min-height:0}
+  .ticker-track{gap:16px}
+  .tok{gap:7px}
   .tok .av{width:19px;height:19px;font-size:9.5px}
   .tok .nm{font-size:11px}
   .tok .pc{font-size:10px}
@@ -312,16 +332,26 @@ footer .warn{color:#FFB25E;max-width:74ch;line-height:1.6}
 <section class="strip">
   <div class="wrap strip-in">
     <span class="strip-t">🔥 Trending <b>now</b></span>
-    <span class="tok"><span class="av" style="background:#E8B84B">D</span>
-      <span class="col"><span class="nm">DOGE</span><span class="pc">+12.4%</span></span></span>
-    <span class="tok"><span class="av" style="background:#4FE0A0">P</span>
-      <span class="col"><span class="nm">PEPE</span><span class="pc">+28.1%</span></span></span>
-    <span class="tok"><span class="av" style="background:#F0A63C">B</span>
-      <span class="col"><span class="nm">BONK</span><span class="pc">+33.2%</span></span></span>
-    <span class="tok m-hide"><span class="av" style="background:#CFCFCF">P</span>
-      <span class="col"><span class="nm">POPCAT</span><span class="pc">+21.7%</span></span></span>
-    <span class="tok"><span class="av" style="background:#FF9ECF">M</span>
-      <span class="col"><span class="nm">MEW</span><span class="pc">+18.9%</span></span></span>
+    <!-- Symbols are static; every number and logo is fetched live. Before the
+         fetch lands, and if it never does, the change reads "—". -->
+    <div class="ticker"><div class="ticker-track" id="ticker">
+      <span class="tok"><span class="av" style="background:#F0A63C">B</span>
+        <span class="col"><span class="nm">BONK</span><span class="pc">—</span></span></span>
+      <span class="tok"><span class="av" style="background:#DCC9A8">W</span>
+        <span class="col"><span class="nm">WIF</span><span class="pc">—</span></span></span>
+      <span class="tok"><span class="av" style="background:#CFCFCF">P</span>
+        <span class="col"><span class="nm">POPCAT</span><span class="pc">—</span></span></span>
+      <span class="tok"><span class="av" style="background:#FF9ECF">M</span>
+        <span class="col"><span class="nm">MEW</span><span class="pc">—</span></span></span>
+      <span class="tok"><span class="av" style="background:#9AD3F0">B</span>
+        <span class="col"><span class="nm">BOME</span><span class="pc">—</span></span></span>
+      <span class="tok"><span class="av" style="background:#E8B84B">G</span>
+        <span class="col"><span class="nm">GIGA</span><span class="pc">—</span></span></span>
+      <span class="tok"><span class="av" style="background:#C9A88A">P</span>
+        <span class="col"><span class="nm">PNUT</span><span class="pc">—</span></span></span>
+      <span class="tok"><span class="av" style="background:#7FE0C0">F</span>
+        <span class="col"><span class="nm">FARTCOIN</span><span class="pc">—</span></span></span>
+    </div></div>
     <span class="moon">To the moon <span aria-hidden="true">→</span></span>
   </div>
 </section>
@@ -345,5 +375,80 @@ footer .warn{color:#FFB25E;max-width:74ch;line-height:1.6}
   </footer>
 </div>
 
+<script>
+/* Live prices for the ticker. DexScreener is free, keyless and CORS-open, and
+   it is the same source the bot uses. Everything here is defensive: the page
+   already renders a usable row, so a failure leaves the em dashes alone. */
+(function(){
+  var MINTS=[
+    'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263', /* BONK     */
+    'EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm', /* WIF      */
+    '7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr', /* POPCAT   */
+    'MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5',  /* MEW      */
+    'ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82',  /* BOME     */
+    '63LfDmNb3MQ8mw9MtZ2To9bEA2M71kZUUGq5tiJxcqj9', /* GIGA     */
+    '2qEHjDLDLbuBgRYvsxhc5D6uDWAivNFZGan56P1tpump', /* PNUT     */
+    '9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump'  /* FARTCOIN */
+  ];
+  var track=document.getElementById('ticker');
+  if(!track||!window.fetch)return;
+
+  function token(p){
+    var sym=String(p.baseToken.symbol||'').trim().replace(/^\$/,'').toUpperCase().slice(0,12);
+    var ch=p.priceChange&&typeof p.priceChange.h24==='number'?p.priceChange.h24:null;
+    var img=p.info&&p.info.imageUrl;
+
+    var el=document.createElement('span'); el.className='tok';
+    var av=document.createElement('span'); av.className='av';
+    av.style.background='#2A1B3D'; av.textContent=sym.charAt(0);
+    if(img){
+      var i=document.createElement('img');
+      i.alt=''; i.referrerPolicy='no-referrer';
+      /* Appended straight away, and no loading="lazy": a detached lazy image
+         never starts loading, which is why these were all letters. */
+      i.onerror=function(){ i.remove(); };
+      i.src=img;
+      av.appendChild(i);
+    }
+    var nm=document.createElement('span'); nm.className='nm'; nm.textContent=sym;
+    var pc=document.createElement('span'); pc.className='pc';
+    if(ch===null){ pc.textContent='\u2014'; }
+    else { pc.textContent=(ch>=0?'+':'')+ch.toFixed(1)+'%'; pc.className='pc '+(ch>=0?'up':'down'); }
+    var col=document.createElement('span'); col.className='col';
+    col.appendChild(nm); col.appendChild(pc);
+    el.appendChild(av); el.appendChild(col);
+    return el;
+  }
+
+  fetch('https://api.dexscreener.com/latest/dex/tokens/'+MINTS.join(','))
+    .then(function(r){ return r.ok?r.json():Promise.reject(r.status); })
+    .then(function(d){
+      var pairs=(d&&d.pairs)||[], best={};
+      pairs.forEach(function(p){
+        if(!p||p.chainId!=='solana'||!p.baseToken)return;
+        var a=p.baseToken.address, liq=(p.liquidity&&p.liquidity.usd)||0;
+        /* One token has many pools; the deepest is the honest price. Pools
+           that report no 24h change lose to ones that do, whatever their
+           depth -- otherwise the deepest pool can leave a bare dash. */
+        var has=!!(p.priceChange&&typeof p.priceChange.h24==='number');
+        var cur=best[a];
+        if(!cur||(has&&!cur.has)||(has===cur.has&&liq>cur.liq))best[a]={liq:liq,p:p,has:has};
+      });
+      var rows=MINTS.map(function(m){return best[m];}).filter(Boolean).map(function(x){return x.p;});
+      if(rows.length<3)return;
+
+      track.textContent='';
+      /* Twice through, so translateX(-50%) lands exactly on the repeat. */
+      for(var pass=0;pass<2;pass++){
+        rows.forEach(function(p){
+          var t=token(p);
+          if(pass)t.setAttribute('aria-hidden','true');
+          track.appendChild(t);
+        });
+      }
+    })
+    .catch(function(){ /* em dashes stay */ });
+})();
+</script>
 </body>
 </html>
