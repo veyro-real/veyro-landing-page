@@ -324,21 +324,16 @@ footer .warn{color:#FFB25E;max-width:74ch;line-height:1.6}
 @media(min-width:640px) and (max-width:899px){
   .cards{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
-/* Past a phone's width the frame stops being phone-shaped. `cover` then scales
-   the plate by width instead of height, more of the desk comes into view, the
-   coin drops toward the bottom of the frame and the button lands on it.
-   Two layers fix it without moving anything:
-     · the top layer is the plate at its full height, pinned right, so the
-       crop is the one a phone gets at any width;
-     · underneath, the same file at `cover` fills the strip that leaves on the
-       left, so there is no seam -- and that strip is under the darkest part
-       of the scrim anyway.
-   Same URL twice, so it is one download. */
+/* The portrait plate only works while the frame is taller than the plate is.
+   Past 9:16 `cover` has to scale it up to fill the width, more of the desk
+   comes into view, the coin drops toward the bottom of the frame and the
+   button lands on it. That is the exact condition below, so past it the
+   landscape plate takes over -- the same scene, shot wide. One image at a
+   time: layering the two over each other repeats the picture. */
+@media(max-width:899px) and (min-aspect-ratio:9/16){
+  .hero{background:url('/hero.jpg') 70% center/cover no-repeat,var(--base)}
+}
 @media(min-width:480px) and (max-width:899px){
-  .hero{background:
-    url('/hero-mobile.jpg') right top/auto 100% no-repeat,
-    url('/hero-mobile.jpg') center top/cover no-repeat,
-    var(--base)}
   .hero-in{padding-block:clamp(72px,9vh,98px) clamp(30px,4.4vh,48px)}
   .m-script{font-size:clamp(38px,6.6vw,48px)}
   .m-graf{top:clamp(76px,9vh,98px)}

@@ -228,16 +228,31 @@ subject and the coin.
 plate and pushed the subject into the copy column, which is what forced the
 heavy scrim in the first place.
 
-**Above 480 px the plate is two layers.** A phone frame is taller than the
-plate's aspect, so `cover` scales it by height and the whole image height is
-in view — which is why the coin lands at 66–81% and the button clears it.
-Wider than that, `cover` scales by width instead, more of the desk comes in,
-the coin drops toward the bottom and the pinned button lands on it. So from
-480 px the plate is set at `auto 100%` pinned right, which is the phone's crop
-at any width, with the same file at `cover` underneath filling the strip that
-leaves on the left. One download, no seam, and the strip sits under the
-darkest part of the scrim. Unpinning the button instead was tried and was
-worse: it floats mid-frame and leaves a void underneath.
+**Past 9:16 the plate swaps, it does not stack.** A phone frame is taller
+than the portrait plate's aspect, so `cover` scales it by height, the whole
+image height is in view, the coin lands at 66–81% and the pinned button
+clears it. Once the frame is wider than 9:16, `cover` has to scale the plate
+up to fill the width instead: more of the desk comes in, the coin drops
+toward the bottom, and the button lands on it. That is the exact trigger:
+
+```css
+@media (max-width: 899px) and (min-aspect-ratio: 9/16) {
+  .hero { background: url('/hero.jpg') 70% center/cover no-repeat, var(--base) }
+}
+```
+
+`hero.jpg` is the same scene shot wide, and at `70% center` it holds the
+subject and the coin at 52–72% of the frame across the whole band, well clear
+of the button. Concept 2 uses the same condition in reverse — the portrait
+plate only below 640 px *and* narrower than 9:16.
+
+Two dead ends, both worse, both tried:
+
+- **Unpinning the button** so it followed the copy. It floats mid-frame over
+  the subject with the coin behind it and a void underneath.
+- **Layering the two crops of the portrait plate** — `auto 100%` pinned right
+  over the same file at `cover`. The two scales do not line up, so the picture
+  visibly repeats down a seam. One image at a time.
 
 ### Measured contrast
 

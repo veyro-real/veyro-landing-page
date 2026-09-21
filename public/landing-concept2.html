@@ -209,8 +209,9 @@ footer .warn{color:#FFB25E;max-width:74ch;line-height:1.6}
 @media(max-width:639px){
   /* The landscape plate is unusable in a portrait frame -- cover zooms it to
      a slice of the city. The portrait plate is the same scene, shot for this
-     shape. */
-  .hero{background-image:url('/hero-mobile.jpg');background-position:top center}
+     shape, and it holds while the frame is taller than 9:16. Past that it
+     would have to be scaled up instead, so the landscape plate stays. */
+  .hero{background-position:top center}
   /* Art at the top, copy on near-solid ink below it. */
   .hero::before{background:linear-gradient(180deg,
     rgba(10,7,16,.60) 0%, rgba(10,7,16,.16) 11%, rgba(10,7,16,.12) 19%,
@@ -233,6 +234,10 @@ footer .warn{color:#FFB25E;max-width:74ch;line-height:1.6}
   .tok .nm{font-size:11px}
   .tok .pc{font-size:10px}
   .strip-t{font-size:10px;gap:3px;letter-spacing:.02em}
+}
+
+@media(max-width:639px) and (max-aspect-ratio:9/16){
+  .hero{background-image:url('/hero-mobile.jpg')}
 }
 
 @media(prefers-reduced-motion:reduce){*{transition-duration:1ms!important}}
