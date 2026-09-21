@@ -130,7 +130,31 @@ stops looking like this mockup.
 - **Card glow.** Border is `color-mix(accent 34%, rule)`; on hover it goes to the
   full accent with `0 0 26px` of it. Icons carry `drop-shadow(0 0 10px accent)`.
 - **Gradient text.** `background-clip: text` with transparent fill on H1 line two
-  and the join heading.
+  and the join heading, using `--grad-lit`, not `--grad`.
+
+  Two traps here, both of which bit this build:
+
+  **A `text-shadow` paints above the element's background.** With
+  `background-clip: text` the gradient *is* the background, so the hero's
+  `text-shadow: 0 1px 14px rgba(5,3,10,.85)` was painting a dark blurred glyph
+  straight over the fill — the second line read as a grey smudge for as long as
+  that rule applied to it. `h1 em { text-shadow: none }`.
+
+  **A `filter` on the same element makes Chromium drop the clipped fill**, so
+  reaching for `drop-shadow` to glow it leaves nothing but a silhouette. The
+  glow is a blurred `::before` copy (`content: attr(data-glow)`) behind the
+  text instead.
+
+  `--grad-lit` (`#C551E8 → #E163F0 44% → #FFB2FA`) is the sampled `--grad`
+  lifted for type that sits on photography. The measured ramp starts at
+  `#952EB8`, which is near-black against a night plate. `--grad` stays as the
+  record of what the mockup actually contains.
+
+- **The desktop hero scrim was cut back** from `.97/.95/.62/.12` to
+  `.90/.84/.54/.14/0`. At the old weights the city behind the copy was painted
+  out entirely. The plate is anchored `right 66%` rather than `right center`,
+  biased up the frame so the coin survives the vertical crop `cover` takes on a
+  wide, short viewport.
 
 ---
 

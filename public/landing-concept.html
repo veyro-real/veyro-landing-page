@@ -24,6 +24,7 @@
   --mag:#C724F0; --mag-2:#E94BE8; --cta-a:#A503E1; --cta-b:#C71CF4; --pink:#FF8BF5; --violet:#785BC3;
   --blue:#77C1DC; --green:#1AD99D; --rose:#D872CE;
   --grad:linear-gradient(96deg,#952EB8,#C440E4 48%,#FC8BFB);
+  --grad-lit:linear-gradient(96deg,#C551E8,#E163F0 44%,#FFB2FA);
   --cta-grad:linear-gradient(96deg,#A503E1,#C71CF4);
   --sans:'Inter',ui-sans-serif,system-ui,-apple-system,sans-serif;
   --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
@@ -71,7 +72,7 @@ img,svg{display:block;max-width:100%}
 .cta:active{transform:translateY(0)}
 
 /* ───────────────────────────────────────────────────────────── hero */
-.hero{position:relative;background:url('/hero.jpg') center right/cover no-repeat,var(--base);
+.hero{position:relative;background:url('/hero.jpg') right 66%/cover no-repeat,var(--base);
       border-bottom:1px solid var(--rule)}
 @media(max-width:899px){
   /* Portrait plate. The subject sits right-of-centre, so the art is anchored
@@ -90,8 +91,8 @@ img,svg{display:block;max-width:100%}
         min-height:100dvh;display:flex;align-items:stretch;border-bottom:0}
 }
 .hero::before{content:'';position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(90deg,rgba(11,7,20,.97) 0%,rgba(11,7,20,.95) 42%,
-             rgba(11,7,20,.62) 62%,rgba(11,7,20,.12) 100%)}
+  background:linear-gradient(90deg,rgba(11,7,20,.90) 0%,rgba(11,7,20,.84) 38%,
+             rgba(11,7,20,.54) 58%,rgba(11,7,20,.14) 82%,rgba(11,7,20,0) 100%)}
 @media(max-width:899px){
   /* Measured: the ladder at #9C93AE over a bright photo pixel was 2.5:1.
      The art is clear at the top, then the scrim goes near-solid from just
@@ -151,8 +152,14 @@ img,svg{display:block;max-width:100%}
          font-weight:600;color:var(--violet);margin-bottom:clamp(14px,1.8vw,20px)}
 h1{font-size:clamp(2.1rem,5.1vw,3.65rem);line-height:1.02;letter-spacing:-.03em;font-weight:900;
    text-transform:uppercase;margin-bottom:18px;overflow-wrap:anywhere;min-width:0}
-h1 em{font-style:normal;display:block;background:var(--grad);
+/* No filter on this element: a filter and background-clip:text on the same
+   box makes Chromium drop the clipped fill, leaving only a dark silhouette.
+   The glow is a blurred copy behind it instead. */
+h1 em{position:relative;font-style:normal;display:block;background:var(--grad-lit);
       -webkit-background-clip:text;background-clip:text;color:transparent}
+h1 em{text-shadow:none}
+h1 em::before{content:attr(data-glow);position:absolute;inset:0;z-index:-1;
+      color:#E163F0;filter:blur(18px);opacity:.5;pointer-events:none}
 .lead{font-size:clamp(15px,1.5vw,17.5px);color:#C8C6D5;max-width:27em;margin-bottom:26px;line-height:1.45}
 
 .cta-big{display:inline-flex;align-items:center;gap:16px;background:var(--cta-grad);color:#fff;
@@ -217,7 +224,8 @@ h1 em{font-style:normal;display:block;background:var(--grad);
 .join>*{position:relative;z-index:1}
 .join-in{padding-block:clamp(48px,7vw,86px)}
 .join h2{font-size:clamp(19px,2.7vw,30px);font-weight:900;letter-spacing:.14em;text-transform:uppercase;
-         margin-bottom:11px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+         margin-bottom:11px;background:var(--grad-lit);-webkit-background-clip:text;
+         background-clip:text;color:transparent}
 .join p{font-size:clamp(14px,1.5vw,16.5px);color:#E7DFF3;margin-bottom:26px}
 .ghosts{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
 .ghost{display:inline-flex;align-items:center;gap:11px;border:1px solid #6B4A8F;border-radius:999px;
@@ -379,7 +387,7 @@ footer .warn{color:#FFB25E;max-width:74ch;line-height:1.6}
   <div class="wrap hero-in"><div class="hero-copy">
     <p class="m-script" aria-hidden="true">Good Coins<br>Better Days<br><span class="hrt">♡</span></p>
     <p class="eyebrow d-only">Meme coins &nbsp;·&nbsp; Smart data &nbsp;·&nbsp; Better days</p>
-    <h1 class="d-only">From doomer<em>to alpha zoomer.</em></h1>
+    <h1 class="d-only">From doomer<em data-glow="to alpha zoomer.">to alpha zoomer.</em></h1>
     <div class="m-only">
       <ul class="ladder"><li>Scan</li><li>Track</li><li>Analyze</li><li>Trade</li><li>Send</li></ul>
       <p class="m-tag">Solana<br>memecoins<br>made simple</p>
