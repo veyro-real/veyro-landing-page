@@ -1,6 +1,9 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "veyro-landing",
+  // Jeremy Meyer's personal Cloudflare account -- the one that owns the
+  // veyro.wtf zone. Pinned so a deploy can never land in the wrong account.
+  "account_id": "192f944b9d34b749eeb20e0cb9a221f9",
   "compatibility_date": "2026-09-15",
   // Assets-only Worker: no `main`, so Cloudflare serves the export directly
   // and there is no script to cold-start.
@@ -8,11 +11,12 @@
     "directory": "./out",
     "not_found_handling": "404-page"
   },
-  // Keep the preview URL alive. Adding a `routes` entry silently turns this
-  // off, which is how the workers.dev URL went dark on the first attempt.
-  "workers_dev": true
-  // veyro.wtf cannot be attached from here: its Cloudflare zone is not in
-  // this account (API 10082, "can't infer zone from route"). Restore the
-  // routes block once wrangler is logged into the account that owns it:
-  //   "routes": [{ "pattern": "veyro.wtf", "custom_domain": true }]
+  // Adding `routes` silently disables the preview URL unless this is
+  // explicit -- that is how the workers.dev URL went dark first time round.
+  "workers_dev": true,
+  // Attaching this replaces the zone's CNAME-to-Railway with the Worker and
+  // issues the cert. Only works from the account that owns the zone.
+  "routes": [
+    { "pattern": "veyro.wtf", "custom_domain": true }
+  ]
 }
